@@ -5,18 +5,18 @@ export default function Home() {
     <main style={{ minHeight: 'calc(100vh - 73px)', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       {/* Hero Section */}
       <section style={{ padding: '120px 24px 80px', textAlign: 'center', color: 'white' }}>
-        <h1 style={{ 
-          fontSize: 56, 
-          fontWeight: 800, 
-          margin: '0 0 24px 0', 
+        <h1 style={{
+          fontSize: 56,
+          fontWeight: 800,
+          margin: '0 0 24px 0',
           lineHeight: 1.2,
           textShadow: '0 4px 24px rgba(0,0,0,0.2)'
         }}>
           Transformez vos images avec l'IA
         </h1>
-        <p style={{ 
-          fontSize: 24, 
-          margin: '0 0 48px 0', 
+        <p style={{
+          fontSize: 24,
+          margin: '0 0 48px 0',
           opacity: 0.95,
           maxWidth: 700,
           marginLeft: 'auto',
@@ -25,15 +25,15 @@ export default function Home() {
           Utilisez le pouvoir de SDXL pour modifier vos images simplement avec du texte
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link 
-            href="/signup" 
-            style={{ 
-              padding: '16px 32px', 
-              background: 'white', 
-              color: '#667eea', 
-              borderRadius: 12, 
-              textDecoration: 'none', 
-              fontWeight: 600, 
+          <Link
+            href="/signup"
+            style={{
+              padding: '16px 32px',
+              background: 'white',
+              color: '#667eea',
+              borderRadius: 12,
+              textDecoration: 'none',
+              fontWeight: 600,
               fontSize: 18,
               boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
               transition: 'transform 0.2s'
@@ -41,15 +41,15 @@ export default function Home() {
           >
             Commencer gratuitement →
           </Link>
-          <Link 
-            href="/login" 
-            style={{ 
-              padding: '16px 32px', 
-              background: 'rgba(255,255,255,0.2)', 
-              color: 'white', 
-              borderRadius: 12, 
-              textDecoration: 'none', 
-              fontWeight: 600, 
+          <Link
+            href="/login"
+            style={{
+              padding: '16px 32px',
+              background: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              borderRadius: 12,
+              textDecoration: 'none',
+              fontWeight: 600,
               fontSize: 18,
               border: '2px solid white'
             }}
@@ -99,16 +99,16 @@ export default function Home() {
         <p style={{ fontSize: 20, color: '#6b7280', marginBottom: 40 }}>
           Créez un compte gratuitement et commencez à transformer vos images
         </p>
-        <Link 
-          href="/signup" 
-          style={{ 
+        <Link
+          href="/signup"
+          style={{
             display: 'inline-block',
-            padding: '16px 48px', 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-            color: 'white', 
-            borderRadius: 12, 
-            textDecoration: 'none', 
-            fontWeight: 600, 
+            padding: '16px 48px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            borderRadius: 12,
+            textDecoration: 'none',
+            fontWeight: 600,
             fontSize: 18,
             boxShadow: '0 8px 32px rgba(102, 126, 234, 0.4)'
           }}

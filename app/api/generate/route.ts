@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseClient';
+import { createServerClient } from '@supabase/ssr';
 import Replicate from 'replicate';
 
 const replicate = new Replicate({
@@ -8,18 +9,37 @@ const replicate = new Replicate({
 
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier l'authentification
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-    
+    // Créer un client Supabase qui utilise les cookies de la requête
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value;
+          },
+          set(name: string, value: string, options: any) {
+            // Pas besoin de set dans une API route
+          },
+          remove(name: string, options: any) {
+            // Pas besoin de remove dans une API route
+          },
+        },
+      }
+    );
+
+    // Vérifier l'authentification via les cookies
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
     if (authError || !user) {
+      console.error('❌ Erreur auth:', authError);
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Non authentifié', details: authError?.message },
         { status: 401 }
       );
     }
+
+    console.log('✅ Utilisateur authentifié:', user.email);
 
     const formData = await request.formData();
     const images = formData.getAll('images') as File[];
