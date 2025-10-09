@@ -4,31 +4,40 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 export default function Home() {
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>('');
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0] ?? null;
-    setFile(f);
+  const onFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFiles(selectedFiles);
     setResultUrl(null);
     setError(null);
-    if (f) setPreview(URL.createObjectURL(f));
+    setPreviews(selectedFiles.map(f => URL.createObjectURL(f)));
+  };
+
+  const removeFile = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index);
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    setPreviews(newPreviews);
   };
 
   const generate = async () => {
-    if (!file || !prompt) return setError('Image et prompt requis');
+    if (files.length === 0 || !prompt) return setError('Au moins une image et un prompt requis');
     setLoading(true);
     setError(null);
-    setLoadingMessage('📤 Upload de l\'image...');
+    setLoadingMessage('📤 Upload des images...');
 
     try {
       const form = new FormData();
-      form.append('image', file);
+      files.forEach((file, index) => {
+        form.append('images', file);
+      });
       form.append('prompt', prompt);
 
       setLoadingMessage('🤖 Génération en cours (Replicate)...');
@@ -62,22 +71,32 @@ export default function Home() {
 
         <section style={{ background: 'white', padding: 20, borderRadius: 12, boxShadow: '0 6px 24px rgba(16,24,40,0.06)' }}>
           <div style={{ display: 'grid', gap: 12 }}>
-            <label style={{ fontWeight: 600 }}>Image</label>
-            <input type="file" accept="image/*" onChange={onFile} disabled={loading} />
+            <label style={{ fontWeight: 600 }}>Images (plusieurs acceptées)</label>
+            <input type="file" accept="image/*" multiple onChange={onFiles} disabled={loading} />
 
-            {preview && (
-              <div style={{ width: 300, height: 300, borderRadius: 8, overflow: 'hidden', boxShadow: '0 6px 18px rgba(16,24,40,0.06)' }}>
-                {/* Use native img for preview (blob URL) */}
-                <img src={preview} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {previews.length > 0 && (
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                {previews.map((preview, index) => (
+                  <div key={index} style={{ position: 'relative', width: 200, height: 200, borderRadius: 8, overflow: 'hidden', boxShadow: '0 6px 18px rgba(16,24,40,0.06)' }}>
+                    <img src={preview} alt={`preview ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <button 
+                      onClick={() => removeFile(index)}
+                      disabled={loading}
+                      style={{ position: 'absolute', top: 8, right: 8, background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: 30, height: 30, cursor: 'pointer', fontSize: 16 }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
 
             <label style={{ fontWeight: 600 }}>Prompt</label>
-            <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={4} disabled={loading} style={{ padding: 12, borderRadius: 8, border: '1px solid #e6e9ef' }} />
+            <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={4} disabled={loading} style={{ padding: 12, borderRadius: 8, border: '1px solid #e6e9ef' }} placeholder="Décrivez la transformation souhaitée..." />
 
             <div>
-              <button onClick={generate} disabled={loading || !file || !prompt} style={{ padding: '12px 18px', borderRadius: 8, background: '#4f46e5', color: 'white', border: 'none', cursor: 'pointer' }}>
-                {loading ? '⏳ Génération...' : '🚀 Générer'}
+              <button onClick={generate} disabled={loading || files.length === 0 || !prompt} style={{ padding: '12px 18px', borderRadius: 8, background: '#4f46e5', color: 'white', border: 'none', cursor: 'pointer', opacity: (loading || files.length === 0 || !prompt) ? 0.5 : 1 }}>
+                {loading ? '⏳ Génération...' : `🚀 Générer (${files.length} image${files.length > 1 ? 's' : ''})`}
               </button>
             </div>
 

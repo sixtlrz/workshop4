@@ -4,11 +4,12 @@ Un éditeur d'images alimenté par l'IA utilisant Next.js, Supabase et Replicate
 
 ## 🚀 Fonctionnalités
 
-- Upload d'images
-- Transformation d'images via IA (Replicate)
-- Stockage dans Supabase Storage
-- Interface moderne et intuitive
-- Historique des transformations en base de données
+- **Upload multiple d'images** - Téléchargez plusieurs images à la fois
+- **Transformation d'images via IA** - Utilise le modèle Instruct-Pix2Pix de Replicate
+- **Image-to-Image avec prompt** - Transforme une image selon vos instructions textuelles
+- **Stockage dans Supabase** - Toutes les images sont stockées de manière sécurisée
+- **Interface moderne et intuitive** - Design épuré et facile à utiliser
+- **Historique des transformations** - Toutes les générations sont sauvegardées en base de données
 
 ## 📋 Prérequis
 

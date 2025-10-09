@@ -9,57 +9,71 @@ const replicate = new Replicate({
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const image = formData.get('image') as File;
+    const images = formData.getAll('images') as File[];
     const prompt = formData.get('prompt') as string;
 
-    if (!image || !prompt) {
+    if (!images || images.length === 0 || !prompt) {
       return NextResponse.json(
-        { error: 'Image et prompt requis' },
+        { error: 'Au moins une image et un prompt requis' },
         { status: 400 }
       );
     }
 
-    console.log('📤 Upload de l\'image vers Supabase...');
+    console.log(`📤 Upload de ${images.length} image(s) vers Supabase...`);
 
-    // 1. Convertir le fichier en buffer
-    const arrayBuffer = await image.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // 1. Uploader toutes les images et récupérer leurs URLs
+    const inputImageUrls: string[] = [];
+    
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
 
-    // 2. Upload de l'image originale dans input-images bucket
-    const fileName = `${Date.now()}-${image.name}`;
-    const { data: uploadData, error: uploadError } = await supabaseAdmin
-      .storage
-      .from(process.env.NEXT_PUBLIC_INPUT_BUCKET!)
-      .upload(fileName, buffer, {
-        contentType: image.type || 'application/octet-stream',
-        cacheControl: '3600',
-      });
+      const fileName = `${Date.now()}-${i}-${image.name}`;
+      const { data: uploadData, error: uploadError } = await supabaseAdmin
+        .storage
+        .from(process.env.NEXT_PUBLIC_INPUT_BUCKET!)
+        .upload(fileName, buffer, {
+          contentType: image.type || 'application/octet-stream',
+          cacheControl: '3600',
+        });
 
-    if (uploadError) {
-      console.error('❌ Erreur upload:', uploadError);
-      return NextResponse.json(
-        { error: 'Erreur lors de l\'upload de l\'image', details: uploadError.message },
-        { status: 500 }
-      );
+      if (uploadError) {
+        console.error('❌ Erreur upload:', uploadError);
+        return NextResponse.json(
+          { error: `Erreur lors de l'upload de l'image ${i + 1}`, details: uploadError.message },
+          { status: 500 }
+        );
+      }
+
+      const { data: publicUrlData } = supabaseAdmin
+        .storage
+        .from(process.env.NEXT_PUBLIC_INPUT_BUCKET!)
+        .getPublicUrl(fileName);
+
+      inputImageUrls.push(publicUrlData.publicUrl);
+      console.log(`✅ Image ${i + 1} uploadée:`, publicUrlData.publicUrl);
     }
 
-    // 3. Récupérer l'URL publique de l'image uploadée
-    const { data: publicUrlData } = supabaseAdmin
-      .storage
-      .from(process.env.NEXT_PUBLIC_INPUT_BUCKET!)
-      .getPublicUrl(fileName);
+    // 2. Utiliser la première image comme image principale pour Replicate
+    const mainImageUrl = inputImageUrls[0];
+    
+    // Si plusieurs images, on peut les mentionner dans le prompt
+    const enhancedPrompt = images.length > 1 
+      ? `${prompt} (en tenant compte de ${images.length} images de référence)`
+      : prompt;
 
-    const inputImageUrl = publicUrlData.publicUrl;
-    console.log('✅ Image uploadée:', inputImageUrl);
-
-    // 4. Appeler Replicate avec l'URL de l'image
-    console.log('🤖 Appel à Replicate...');
+    // 3. Appeler Replicate avec l'image principale et le prompt
+    console.log('🤖 Appel à Replicate avec image principale...');
     const output = await replicate.run(
       process.env.REPLICATE_MODEL_ID as `${string}/${string}:${string}`,
       {
         input: {
-          image: inputImageUrl,
-          prompt: prompt,
+          image: mainImageUrl,
+          prompt: enhancedPrompt,
+          num_inference_steps: 50,
+          guidance_scale: 7.5,
+          image_guidance_scale: 1.5,
         }
       }
     );
@@ -113,7 +127,7 @@ export async function POST(request: NextRequest) {
     const { data: projectData, error: projectError } = await supabaseAdmin
       .from('projects')
       .insert({
-        input_image_url: inputImageUrl,
+        input_image_url: mainImageUrl, // Image principale
         output_image_url: outputImageUrl,
         prompt: prompt,
         status: 'completed',
@@ -130,9 +144,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      inputImageUrl,
+      inputImageUrls, // Toutes les URLs d'input
+      mainImageUrl, // Image principale utilisée
       outputImageUrl,
-      prompt,
+      prompt: enhancedPrompt,
       projectId: projectData?.id,
     });
 
