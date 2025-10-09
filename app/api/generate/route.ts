@@ -8,6 +8,19 @@ const replicate = new Replicate({
 
 export async function POST(request: NextRequest) {
   try {
+    // Vérifier l'authentification
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Non authentifié' },
+        { status: 401 }
+      );
+    }
+
     const formData = await request.formData();
     const images = formData.getAll('images') as File[];
     const prompt = formData.get('prompt') as string;
@@ -133,11 +146,12 @@ export async function POST(request: NextRequest) {
     const outputImageUrl = outputPublicUrlData.publicUrl;
     console.log('✅ Image générée uploadée:', outputImageUrl);
 
-    // 9. Sauvegarder dans la table projects
+    // 9. Sauvegarder dans la table projects avec user_id
     console.log('💾 Sauvegarde dans la base de données...');
     const { data: projectData, error: projectError } = await supabaseAdmin
       .from('projects')
       .insert({
+        user_id: user.id, // ID de l'utilisateur authentifié
         input_image_url: mainImageUrl, // Image principale
         output_image_url: outputImageUrl,
         prompt: prompt,

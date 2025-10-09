@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { AuthProvider } from '@/contexts/AuthContext'
+import Header from '@/components/Header'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AI Image Editor',
@@ -12,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body style={{ margin: 0, padding: 0 }}>{children}</body>
+      <body style={{ margin: 0, padding: 0 }}>
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   )
 }
