@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     // 1. Uploader toutes les images et récupérer leurs URLs
     const inputImageUrls: string[] = [];
-    
+
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       const arrayBuffer = await image.arrayBuffer();
@@ -57,23 +57,34 @@ export async function POST(request: NextRequest) {
 
     // 2. Utiliser la première image comme image principale pour Replicate
     const mainImageUrl = inputImageUrls[0];
-    
+
     // Si plusieurs images, on peut les mentionner dans le prompt
-    const enhancedPrompt = images.length > 1 
+    const enhancedPrompt = images.length > 1
       ? `${prompt} (en tenant compte de ${images.length} images de référence)`
       : prompt;
 
-    // 3. Appeler Replicate avec l'image principale et le prompt
-    console.log('🤖 Appel à Replicate avec image principale...');
+    // 3. Appeler Replicate avec l'image principale et le prompt (SDXL img2img)
+    console.log('🤖 Appel à Replicate SDXL img2img...');
+    console.log('Modèle utilisé:', process.env.REPLICATE_MODEL_ID);
+    console.log('Image source:', mainImageUrl);
+    console.log('Prompt:', enhancedPrompt);
+
     const output = await replicate.run(
       process.env.REPLICATE_MODEL_ID as `${string}/${string}:${string}`,
       {
         input: {
-          image: mainImageUrl,
-          prompt: enhancedPrompt,
-          num_inference_steps: 50,
+          image: mainImageUrl,  // L'image source pour img2img
+          prompt: enhancedPrompt,  // Le prompt de transformation
+          refine: "expert_ensemble_refiner",  // Pour une meilleure qualité
+          scheduler: "K_EULER",
+          lora_scale: 0.6,
+          num_outputs: 1,
           guidance_scale: 7.5,
-          image_guidance_scale: 1.5,
+          apply_watermark: false,
+          high_noise_frac: 0.8,
+          negative_prompt: "ugly, distorted, low quality, blurry",
+          prompt_strength: 0.8,  // Force du prompt (0.8 = transformation modérée)
+          num_inference_steps: 40,
         }
       }
     );

@@ -79,7 +79,7 @@ export default function Home() {
                 {previews.map((preview, index) => (
                   <div key={index} style={{ position: 'relative', width: 200, height: 200, borderRadius: 8, overflow: 'hidden', boxShadow: '0 6px 18px rgba(16,24,40,0.06)' }}>
                     <img src={preview} alt={`preview ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <button 
+                    <button
                       onClick={() => removeFile(index)}
                       disabled={loading}
                       style={{ position: 'absolute', top: 8, right: 8, background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: 30, height: 30, cursor: 'pointer', fontSize: 16 }}
