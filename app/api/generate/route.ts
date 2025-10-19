@@ -41,6 +41,35 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ Utilisateur authentifié:', user.email);
 
+    // --- Subscription / quota check ---
+    try {
+      const { data: subsData, error: subsError } = await supabaseAdmin
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1);
+
+      if (subsError) {
+        console.warn('Could not fetch subscription info:', subsError.message);
+      }
+
+      const subscription = Array.isArray(subsData) && subsData.length > 0 ? subsData[0] : null;
+
+      if (!subscription || subscription.status !== 'active') {
+        return NextResponse.json({ error: 'Subscription required' }, { status: 402 });
+      }
+
+      const quotaLimit = subscription.quota_limit ?? 0;
+      const quotaUsed = subscription.quota_used ?? 0;
+
+      if (quotaLimit > 0 && quotaUsed >= quotaLimit) {
+        return NextResponse.json({ error: 'Quota exceeded' }, { status: 403 });
+      }
+    } catch (e) {
+      console.warn('Subscription check failed', e);
+    }
+
     const formData = await request.formData();
     const images = formData.getAll('images') as File[];
     const prompt = formData.get('prompt') as string;
@@ -186,6 +215,35 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ Projet sauvegardé:', projectData);
+
+    // 10. Mettre à jour le quota utilisé
+    try {
+      const { data: subscription, error: subsGetError } = await supabaseAdmin
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!subsGetError && subscription) {
+        const currentQuota = subscription.quota_used || 0;
+
+        const { error: subsUpdateError } = await supabaseAdmin
+          .from('subscriptions')
+          .update({
+            quota_used: currentQuota + 1,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', user.id);
+
+        if (subsUpdateError) {
+          console.error('❌ Erreur mise à jour quota:', subsUpdateError);
+        } else {
+          console.log(`✅ Quota utilisé mis à jour: ${currentQuota} → ${currentQuota + 1}`);
+        }
+      }
+    } catch (e) {
+      console.error('❌ Erreur lors de la mise à jour du quota:', e);
+    }
 
     return NextResponse.json({
       success: true,

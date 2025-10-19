@@ -16,13 +16,12 @@ export default function Header() {
 
     return (
         <header style={{
-            background: 'white',
-            borderBottom: '1px solid #e6e9ef',
-            padding: '16px 24px',
+            background: '#F5F1E8',
+            borderBottom: '1px solid #E8DCC4',
+            padding: '20px 24px',
             position: 'sticky',
             top: 0,
             zIndex: 100,
-            boxShadow: '0 2px 8px rgba(16,24,40,0.04)',
         }}>
             <div style={{
                 maxWidth: 1200,
@@ -35,54 +34,70 @@ export default function Header() {
                 <Link href="/" style={{ textDecoration: 'none' }}>
                     <h1 style={{
                         margin: 0,
-                        fontSize: 24,
-                        fontWeight: 700,
-                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
+                        fontSize: 22,
+                        fontWeight: 900,
+                        color: '#4A5D3F',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
                         cursor: 'pointer',
                     }}>
-                        ✨ AI Image Editor
+                        AI IMAGE EDITOR
                     </h1>
                 </Link>
 
                 {/* Navigation */}
                 {!loading && (
-                    <nav style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <nav style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                         {user ? (
                             <>
                                 <Link href="/dashboard" style={{
                                     textDecoration: 'none',
-                                    color: '#4f46e5',
-                                    fontWeight: 500,
-                                    padding: '8px 16px',
-                                    borderRadius: 8,
-                                    transition: 'background 0.2s',
+                                    color: '#6B7F5C',
+                                    fontWeight: 600,
+                                    padding: '10px 20px',
+                                    textTransform: 'uppercase',
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '0.05em',
+                                    transition: 'color 0.2s',
                                 }}>
                                     Dashboard
+                                </Link>
+                                <Link href="/pricing" style={{
+                                    textDecoration: 'none',
+                                    color: '#6B7F5C',
+                                    fontWeight: 600,
+                                    padding: '10px 20px',
+                                    textTransform: 'uppercase',
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '0.05em',
+                                    transition: 'color 0.2s',
+                                }}>
+                                    Abonnements
                                 </Link>
                                 <div style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: 12,
-                                    padding: '8px 16px',
-                                    background: '#f3f4f6',
-                                    borderRadius: 8,
+                                    padding: '10px 20px',
+                                    background: '#E8DCC4',
+                                    borderRadius: '0',
                                 }}>
-                                    <span style={{ fontSize: 14, color: '#6b7280' }}>
+                                    <span style={{ fontSize: 13, color: '#6B7F5C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                         {user.email}
                                     </span>
                                     <button
                                         onClick={handleSignOut}
                                         style={{
-                                            padding: '6px 12px',
-                                            background: '#ef4444',
-                                            color: 'white',
+                                            padding: '8px 16px',
+                                            background: '#4A5D3F',
+                                            color: '#F5F1E8',
                                             border: 'none',
-                                            borderRadius: 6,
-                                            fontSize: 14,
-                                            fontWeight: 500,
+                                            fontSize: 12,
+                                            fontWeight: 700,
                                             cursor: 'pointer',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.05em',
+                                            transition: 'background 0.2s',
                                         }}
                                     >
                                         Déconnexion
@@ -93,20 +108,24 @@ export default function Header() {
                             <>
                                 <Link href="/login" style={{
                                     textDecoration: 'none',
-                                    color: '#4f46e5',
-                                    fontWeight: 500,
-                                    padding: '8px 16px',
-                                    borderRadius: 8,
+                                    color: '#6B7F5C',
+                                    fontWeight: 600,
+                                    padding: '10px 20px',
+                                    textTransform: 'uppercase',
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '0.05em',
                                 }}>
                                     Connexion
                                 </Link>
                                 <Link href="/signup" style={{
                                     textDecoration: 'none',
-                                    color: 'white',
-                                    background: '#4f46e5',
-                                    fontWeight: 500,
-                                    padding: '8px 16px',
-                                    borderRadius: 8,
+                                    color: '#F5F1E8',
+                                    background: '#6B7F5C',
+                                    fontWeight: 700,
+                                    padding: '12px 24px',
+                                    textTransform: 'uppercase',
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '0.05em',
                                 }}>
                                     S'inscrire
                                 </Link>
