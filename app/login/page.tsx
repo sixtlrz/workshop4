@@ -19,8 +19,8 @@ export default function LoginPage() {
     // Afficher un loader pendant la vérification
     if (loading) {
         return (
-            <main style={{ minHeight: 'calc(100vh - 73px)', padding: 48, background: '#f3f6fb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div>Chargement...</div>
+            <main style={{ minHeight: 'calc(100vh - 73px)', padding: 48, background: '#F5F1E8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ color: '#6B7F5C', fontSize: 16, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Chargement...</div>
             </main>
         );
     }
@@ -31,7 +31,7 @@ export default function LoginPage() {
     }
 
     return (
-        <main style={{ minHeight: 'calc(100vh - 73px)', padding: 48, background: '#f3f6fb' }}>
+        <main style={{ minHeight: 'calc(100vh - 73px)', padding: 48, background: '#F5F1E8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <AuthForm mode="signin" />
         </main>
     );

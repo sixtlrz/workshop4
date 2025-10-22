@@ -99,10 +99,10 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
     };
 
     return (
-        <div style={{ maxWidth: 400, margin: '0 auto', padding: 24 }}>
-            <div style={{ background: 'white', padding: 32, borderRadius: 12, boxShadow: '0 6px 24px rgba(16,24,40,0.06)' }}>
+        <div style={{ maxWidth: 500, margin: '0 auto', padding: 24 }}>
+            <div style={{ background: '#FFFFFF', padding: '3rem 2.5rem', border: '1px solid #E8DCC4' }}>
                 {/* Onglets */}
-                <div style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: '2px solid #e6e9ef' }}>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 32, borderBottom: '2px solid #E8DCC4' }}>
                     <button
                         onClick={() => setMode('signin')}
                         style={{
@@ -110,11 +110,14 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                             padding: '12px 0',
                             background: 'none',
                             border: 'none',
-                            borderBottom: mode === 'signin' ? '2px solid #4f46e5' : '2px solid transparent',
-                            color: mode === 'signin' ? '#4f46e5' : '#6b7280',
-                            fontWeight: mode === 'signin' ? 600 : 400,
+                            borderBottom: mode === 'signin' ? '2px solid #6B7F5C' : '2px solid transparent',
+                            color: mode === 'signin' ? '#6B7F5C' : '#8B956D',
+                            fontWeight: mode === 'signin' ? 900 : 600,
                             cursor: 'pointer',
                             marginBottom: -2,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            fontSize: '0.85rem',
                         }}
                     >
                         Connexion
@@ -126,24 +129,27 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                             padding: '12px 0',
                             background: 'none',
                             border: 'none',
-                            borderBottom: mode === 'signup' ? '2px solid #4f46e5' : '2px solid transparent',
-                            color: mode === 'signup' ? '#4f46e5' : '#6b7280',
-                            fontWeight: mode === 'signup' ? 600 : 400,
+                            borderBottom: mode === 'signup' ? '2px solid #6B7F5C' : '2px solid transparent',
+                            color: mode === 'signup' ? '#6B7F5C' : '#8B956D',
+                            fontWeight: mode === 'signup' ? 900 : 600,
                             cursor: 'pointer',
                             marginBottom: -2,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            fontSize: '0.85rem',
                         }}
                     >
                         Inscription
                     </button>
                 </div>
 
-                <h2 style={{ margin: '0 0 8px 0', fontSize: 24, fontWeight: 600 }}>
-                    {mode === 'signin' ? 'Bienvenue' : 'Créer un compte'}
+                <h2 style={{ margin: '0 0 12px 0', fontSize: '2.5rem', fontWeight: 900, color: '#2C3A2B', textTransform: 'uppercase', letterSpacing: '0.05em', textAlign: 'center' }}>
+                    {mode === 'signin' ? 'BIENVENUE' : 'CRÉER UN COMPTE'}
                 </h2>
-                <p style={{ margin: '0 0 24px 0', color: '#6b7280', fontSize: 14 }}>
+                <p style={{ margin: '0 0 32px 0', color: '#8B956D', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, textAlign: 'center' }}>
                     {mode === 'signin'
-                        ? 'Connectez-vous pour accéder à vos projets'
-                        : 'Inscrivez-vous pour commencer à utiliser l\'éditeur IA'}
+                        ? 'Accédez à vos projets'
+                        : 'Commencez à utiliser l\'éditeur IA'}
                 </p>
 
                 {/* Bouton Google OAuth */}
@@ -153,13 +159,14 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                     disabled={loading}
                     style={{
                         width: '100%',
-                        padding: 14,
-                        background: 'white',
-                        color: '#1f2937',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: 8,
-                        fontWeight: 600,
-                        fontSize: 15,
+                        padding: '14px',
+                        background: '#F5F1E8',
+                        color: '#2C3A2B',
+                        border: '2px solid #E8DCC4',
+                        fontWeight: 700,
+                        fontSize: '0.85rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
                         cursor: loading ? 'not-allowed' : 'pointer',
                         opacity: loading ? 0.7 : 1,
                         display: 'flex',
@@ -171,40 +178,40 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                     }}
                     onMouseEnter={(e) => {
                         if (!loading) {
-                            e.currentTarget.style.borderColor = '#4285f4';
-                            e.currentTarget.style.background = '#f8faff';
+                            e.currentTarget.style.borderColor = '#6B7F5C';
+                            e.currentTarget.style.background = '#E8DCC4';
                         }
                     }}
                     onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = '#e5e7eb';
-                        e.currentTarget.style.background = 'white';
+                        e.currentTarget.style.borderColor = '#E8DCC4';
+                        e.currentTarget.style.background = '#F5F1E8';
                     }}
                 >
                     <svg width="20" height="20" viewBox="0 0 48 48">
-                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                        <path fill="none" d="M0 0h48v48H0z"/>
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                        <path fill="none" d="M0 0h48v48H0z" />
                     </svg>
                     Continuer avec Google
                 </button>
 
                 {/* Séparateur */}
-                <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    marginBottom: 24,
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginBottom: 28,
                     gap: 16
                 }}>
-                    <div style={{ flex: 1, height: 1, background: '#e5e7eb' }}></div>
-                    <span style={{ color: '#9ca3af', fontSize: 13, fontWeight: 500 }}>OU</span>
-                    <div style={{ flex: 1, height: 1, background: '#e5e7eb' }}></div>
+                    <div style={{ flex: 1, height: 1, background: '#E8DCC4' }}></div>
+                    <span style={{ color: '#8B956D', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>OU</span>
+                    <div style={{ flex: 1, height: 1, background: '#E8DCC4' }}></div>
                 </div>
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     <div>
-                        <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: 14 }}>
+                        <label style={{ display: 'block', marginBottom: 10, fontWeight: 900, fontSize: '0.75rem', color: '#4A5D3F', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             Email
                         </label>
                         <input
@@ -215,17 +222,21 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                             disabled={loading}
                             style={{
                                 width: '100%',
-                                padding: 12,
-                                border: '1px solid #e6e9ef',
-                                borderRadius: 8,
-                                fontSize: 14,
+                                padding: '1rem 1.25rem',
+                                border: '1px solid #E8DCC4',
+                                background: '#F5F1E8',
+                                fontSize: '1rem',
                                 boxSizing: 'border-box',
+                                color: '#2C3A2B',
+                                transition: 'all 0.3s',
                             }}
+                            onFocus={(e) => e.currentTarget.style.border = '2px solid #6B7F5C'}
+                            onBlur={(e) => e.currentTarget.style.border = '1px solid #E8DCC4'}
                         />
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: 14 }}>
+                        <label style={{ display: 'block', marginBottom: 10, fontWeight: 900, fontSize: '0.75rem', color: '#4A5D3F', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             Mot de passe
                         </label>
                         <input
@@ -236,18 +247,22 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                             disabled={loading}
                             style={{
                                 width: '100%',
-                                padding: 12,
-                                border: '1px solid #e6e9ef',
-                                borderRadius: 8,
-                                fontSize: 14,
+                                padding: '1rem 1.25rem',
+                                border: '1px solid #E8DCC4',
+                                background: '#F5F1E8',
+                                fontSize: '1rem',
                                 boxSizing: 'border-box',
+                                color: '#2C3A2B',
+                                transition: 'all 0.3s',
                             }}
+                            onFocus={(e) => e.currentTarget.style.border = '2px solid #6B7F5C'}
+                            onBlur={(e) => e.currentTarget.style.border = '1px solid #E8DCC4'}
                         />
                     </div>
 
                     {mode === 'signup' && (
                         <div>
-                            <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: 14 }}>
+                            <label style={{ display: 'block', marginBottom: 10, fontWeight: 900, fontSize: '0.75rem', color: '#4A5D3F', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                 Confirmer le mot de passe
                             </label>
                             <input
@@ -258,24 +273,28 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                                 disabled={loading}
                                 style={{
                                     width: '100%',
-                                    padding: 12,
-                                    border: '1px solid #e6e9ef',
-                                    borderRadius: 8,
-                                    fontSize: 14,
+                                    padding: '1rem 1.25rem',
+                                    border: '1px solid #E8DCC4',
+                                    background: '#F5F1E8',
+                                    fontSize: '1rem',
                                     boxSizing: 'border-box',
+                                    color: '#2C3A2B',
+                                    transition: 'all 0.3s',
                                 }}
+                                onFocus={(e) => e.currentTarget.style.border = '2px solid #6B7F5C'}
+                                onBlur={(e) => e.currentTarget.style.border = '1px solid #E8DCC4'}
                             />
                         </div>
                     )}
 
                     {error && (
-                        <div style={{ padding: 12, background: '#fff1f2', color: '#b91c1c', borderRadius: 8, fontSize: 14 }}>
+                        <div style={{ padding: '1rem 1.25rem', background: '#FEE2E2', color: '#991B1B', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #FCA5A5' }}>
                             {error}
                         </div>
                     )}
 
                     {success && (
-                        <div style={{ padding: 12, background: '#f0fdf4', color: '#15803d', borderRadius: 8, fontSize: 14 }}>
+                        <div style={{ padding: '1rem 1.25rem', background: '#ECFDF5', color: '#047857', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #6EE7B7' }}>
                             {success}
                         </div>
                     )}
@@ -285,18 +304,33 @@ export default function AuthForm({ mode: initialMode = 'signin' }: { mode?: Auth
                         disabled={loading}
                         style={{
                             width: '100%',
-                            padding: 14,
-                            background: '#4f46e5',
-                            color: 'white',
+                            padding: '1.2rem 2rem',
+                            background: '#6B7F5C',
+                            color: '#F5F1E8',
                             border: 'none',
-                            borderRadius: 8,
-                            fontWeight: 600,
-                            fontSize: 16,
+                            fontWeight: 900,
+                            fontSize: '0.85rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.1em',
                             cursor: loading ? 'not-allowed' : 'pointer',
-                            opacity: loading ? 0.7 : 1,
+                            opacity: loading ? 0.5 : 1,
+                            transition: 'all 0.3s',
+                            marginTop: '1rem',
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!loading) {
+                                e.currentTarget.style.background = '#4A5D3F';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (!loading) {
+                                e.currentTarget.style.background = '#6B7F5C';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                            }
                         }}
                     >
-                        {loading ? '⏳ Chargement...' : mode === 'signin' ? 'Se connecter' : 'S\'inscrire'}
+                        {loading ? '⏳ CHARGEMENT...' : mode === 'signin' ? 'SE CONNECTER' : 'S\'INSCRIRE'}
                     </button>
                 </form>
             </div>
